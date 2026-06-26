@@ -38,7 +38,8 @@ export function ProductForm({ initialData }: { initialData?: any }) {
           });
 
           if (!response.ok) {
-            throw new Error('Failed to upload image to Vercel Blob');
+            const errBody = await response.json().catch(() => ({}));
+            throw new Error(`Failed to upload image to Vercel Blob: ${errBody.error || response.statusText || 'Unknown error'}`);
           }
 
           const blob = await response.json();
