@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { db } from '../../src/db';
-import { products } from '../../src/db/schema';
+import { db } from '../../../src/db';
+import { products } from '../../../src/db/schema';
 import { desc } from 'drizzle-orm';
 
 export const dynamic = 'force-dynamic';
