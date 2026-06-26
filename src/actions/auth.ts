@@ -1,7 +1,7 @@
 'use server';
 
 import { eq } from 'drizzle-orm';
-import { db } from '../db';
+import { db, connectionString } from '../db';
 import { users } from '../db/schema';
 import bcrypt from 'bcryptjs';
 import { createSession, deleteSession } from '../lib/session';
@@ -25,7 +25,8 @@ export async function login(prevState: any, formData: FormData) {
   }
 
   if (!user) {
-    return { error: 'Invalid email or password (user not found in DB)' };
+    const maskedDbUrl = connectionString.replace(/:[^:@]*@/, ':***@');
+    return { error: `User not found in DB. Searched for: '${email}'. DB URL: ${maskedDbUrl}` };
   }
 
   // Check password

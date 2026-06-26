@@ -4,7 +4,7 @@ import * as schema from './schema';
 
 // For Next.js Server Actions and edge compat, we might need a connection pool or simple client.
 // Here we use postgres.js
-const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL || 'postgres://postgres:Abdlazeez1432001@localhost:5432/husniyyah_luxe';
+export const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL || 'postgres://postgres:Abdlazeez1432001@localhost:5432/husniyyah_luxe';
 
 // Use a singleton pattern to avoid too many connections in development
 const globalForDb = globalThis as unknown as {
