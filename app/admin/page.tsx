@@ -3,6 +3,8 @@ import { products } from '../../src/db/schema';
 import { sql } from 'drizzle-orm';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboard() {
   const result = await db.select({ count: sql<number>`count(*)` }).from(products);
   const totalProducts = result[0].count;

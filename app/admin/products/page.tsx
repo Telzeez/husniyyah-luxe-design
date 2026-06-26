@@ -4,6 +4,8 @@ import { desc } from 'drizzle-orm';
 import Link from 'next/link';
 import Image from 'next/image';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminProductsPage() {
   const allProducts = await db.select().from(products).orderBy(desc(products.id));
 
