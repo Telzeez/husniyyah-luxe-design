@@ -7,7 +7,7 @@ import { desc } from 'drizzle-orm';
 export const dynamic = 'force-dynamic';
 
 export default async function HomePage() {
-  let trendingProducts = [];
+  let trendingProducts: any[] = [];
   try {
     // Fetch latest products from the database
     trendingProducts = await db.select().from(products).orderBy(desc(products.id)).limit(12);
