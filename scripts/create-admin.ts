@@ -1,5 +1,9 @@
+import * as dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
 import { db } from '../src/db';
 import { users } from '../src/db/schema';
+import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
 
 async function createAdmin() {
@@ -21,7 +25,11 @@ async function createAdmin() {
     console.log(`Password: ${plainPassword}`);
   } catch (error: any) {
     if (error.code === '23505' || error.cause?.code === '23505') {
-      console.log('Admin user already exists.');
+      console.log('Admin user already exists. Resetting password...');
+      await db.update(users)
+        .set({ passwordHash: passwordHash })
+        .where(eq(users.email, email));
+      console.log(`Password reset to: ${plainPassword}`);
     } else {
       console.error('Error creating admin user:', error);
     }
