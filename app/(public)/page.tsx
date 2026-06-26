@@ -78,7 +78,7 @@ export default async function HomePage() {
             </Link>
           </div>
           <div className="md:w-1/2 grid grid-cols-2 gap-6">
-            {trendingProducts.slice(1, 3).map((product, idx) => (
+            {trendingProducts.slice(0, 2).map((product, idx) => (
               <div key={idx} className="bg-background rounded-lg p-6 flex flex-col items-center border border-foreground/10 hover:border-brand-gold/30 transition-colors shadow-sm">
                 <div className="relative w-full aspect-square mb-4">
                   <Image src={product.imageUrl} alt={product.name} fill sizes="100vw" className="object-contain drop-shadow-2xl" />
@@ -106,7 +106,7 @@ export default async function HomePage() {
 
         {trendingProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {trendingProducts.slice(3, 9).map((product) => (
+            {trendingProducts.slice(2, 8).map((product) => (
               <Link href={`/product/${product.id}`} key={product.id} className="group flex flex-col bg-background rounded-2xl overflow-hidden border border-foreground/10 hover:border-brand-gold/50 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] shadow-sm">
                 <div className="relative aspect-[4/3] w-full bg-foreground/5 flex items-center justify-center p-8 overflow-hidden transition-colors">
                   <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent z-10 opacity-60"></div>
