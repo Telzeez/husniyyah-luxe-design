@@ -26,7 +26,16 @@ export async function login(prevState: any, formData: FormData) {
 
   if (!user) {
     const maskedDbUrl = connectionString.replace(/:[^:@]*@/, ':***@');
-    return { error: `User not found in DB. Searched for: '${email}'. DB URL: ${maskedDbUrl}` };
+    
+    let allUsersInfo = 'Error fetching all users';
+    try {
+      const allUsers = await db.select().from(users);
+      allUsersInfo = `Total users: ${allUsers.length}. Emails: ${allUsers.map(u => u.email).join(', ')}`;
+    } catch (e: any) {
+      allUsersInfo = `Error: ${e.message}`;
+    }
+
+    return { error: `Searched for: '${email}'. ${allUsersInfo}. DB: ${maskedDbUrl}` };
   }
 
   // Check password
