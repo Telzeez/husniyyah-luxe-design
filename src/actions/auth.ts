@@ -15,19 +15,29 @@ export async function login(prevState: any, formData: FormData) {
     return { error: 'Please enter both email and password' };
   }
 
-  // Find user
-  const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
-  const user = userList[0];
+  let user;
+  try {
+    // Find user
+    const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    user = userList[0];
+  } catch (err: any) {
+    return { error: 'DB Connection Error: ' + err.message };
+  }
 
   if (!user) {
-    return { error: 'Invalid email or password' };
+    return { error: 'Invalid email or password (user not found in DB)' };
   }
 
   // Check password
-  const isValid = await bcrypt.compare(password, user.passwordHash);
+  let isValid = false;
+  try {
+    isValid = await bcrypt.compare(password, user.passwordHash);
+  } catch (err: any) {
+    return { error: 'Bcrypt Error: ' + err.message };
+  }
 
   if (!isValid) {
-    return { error: 'Invalid email or password' };
+    return { error: 'Invalid email or password (password hash mismatch)' };
   }
 
   // Create session
