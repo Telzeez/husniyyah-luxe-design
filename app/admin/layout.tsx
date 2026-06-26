@@ -13,7 +13,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="h-16 flex items-center px-6 border-b border-brand-gold/20">
           <Link href="/" className="flex items-center space-x-2 group">
             <div className="relative w-8 h-8 rounded-full overflow-hidden border border-brand-gold">
-              <Image src="/logo.png" alt="Husniyyah Logo" fill className="object-cover" />
+              <Image src="/logo.png" alt="Husniyyah Logo" fill sizes="100vw" sizes="32px" className="object-cover" />
             </div>
             <span className="font-bold tracking-widest text-sm text-foreground group-hover:text-brand-gold transition-colors">
               HUSNIYYAH

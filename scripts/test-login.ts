@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
-import { db } from '../src/db';
+import { db, connectionString } from '../src/db';
 import { users } from '../src/db/schema';
 import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
@@ -11,6 +11,7 @@ async function testLogin() {
   const password = 'password123';
 
   console.log(`Testing login for ${email}...`);
+  console.log(`Local DB URL: ${connectionString.replace(/:[^:@]*@/, ':***@')}`);
 
   const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
   const user = userList[0];

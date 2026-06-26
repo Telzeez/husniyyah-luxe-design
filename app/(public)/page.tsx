@@ -52,7 +52,7 @@ export default async function HomePage() {
                   <Image 
                     src="/heroimage.jpg" 
                     alt="Featured Handmade Collection" 
-                    fill 
+                    fill sizes="100vw" 
                     className="object-cover"
                   />
                </div>
@@ -81,7 +81,7 @@ export default async function HomePage() {
             {trendingProducts.slice(1, 3).map((product, idx) => (
               <div key={idx} className="bg-background rounded-lg p-6 flex flex-col items-center border border-foreground/10 hover:border-brand-gold/30 transition-colors shadow-sm">
                 <div className="relative w-full aspect-square mb-4">
-                  <Image src={product.imageUrl} alt={product.name} fill className="object-contain drop-shadow-2xl" />
+                  <Image src={product.imageUrl} alt={product.name} fill sizes="100vw" className="object-contain drop-shadow-2xl" />
                 </div>
                 <h3 className="text-foreground font-medium text-center line-clamp-1 transition-colors">{product.name}</h3>
               </div>
@@ -114,7 +114,7 @@ export default async function HomePage() {
                     <Image
                       src={product.imageUrl}
                       alt={product.name}
-                      fill
+                      fill sizes="100vw"
                       className="object-contain drop-shadow-xl"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />

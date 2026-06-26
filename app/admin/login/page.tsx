@@ -12,7 +12,7 @@ export default function LoginPage() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center mb-6">
           <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-brand-gold">
-            <Image src="/logo.png" alt="Husniyyah Logo" fill className="object-cover" />
+            <Image src="/logo.png" alt="Husniyyah Logo" fill sizes="100vw" className="object-cover" />
           </div>
         </div>
         <h2 className="mt-6 text-center text-3xl font-extrabold text-foreground">

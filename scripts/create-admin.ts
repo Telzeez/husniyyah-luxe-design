@@ -1,10 +1,15 @@
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env.local' });
 
-import { db } from '../src/db';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 import { users } from '../src/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+
+const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL || 'postgres://postgres:Abdlazeez1432001@localhost:5432/husniyyah_luxe';
+const conn = postgres(connectionString, { prepare: false });
+const db = drizzle(conn);
 
 async function createAdmin() {
   const email = 'admin@husniyyah.com';

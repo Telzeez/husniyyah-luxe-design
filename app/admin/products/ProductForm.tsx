@@ -120,7 +120,7 @@ export function ProductForm({ initialData }: { initialData?: any }) {
               {preview ? (
                 <div className="absolute inset-0 w-full h-full p-2">
                   <div className="relative w-full h-full rounded-md overflow-hidden bg-background">
-                    <Image src={preview} alt="Preview" fill className="object-contain" />
+                    <Image src={preview} alt="Preview" fill sizes="100vw" className="object-contain" />
                   </div>
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-background/50 transition-opacity">
                      <span className="text-sm font-bold text-foreground">Click to change</span>

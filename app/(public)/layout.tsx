@@ -14,7 +14,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div className="flex-shrink-0 flex items-center space-x-3">
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-transparent group-hover:border-brand-gold transition-colors">
-                <Image src="/logo.png" alt="Husniyyah Logo" fill className="object-cover" />
+                <Image src="/logo.png" alt="Husniyyah Logo" fill sizes="100vw" className="object-cover" />
               </div>
               <span className="text-xl font-bold tracking-[0.2em] text-foreground">
                 HUSNIYYAH
@@ -61,7 +61,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           <div className="col-span-2">
              <div className="flex items-center space-x-3 mb-6">
                 <div className="relative w-8 h-8 rounded-full overflow-hidden">
-                   <Image src="/logo.png" alt="Husniyyah Logo" fill className="object-cover" />
+                   <Image src="/logo.png" alt="Husniyyah Logo" fill sizes="100vw" className="object-cover" />
                 </div>
                 <h3 className="text-xl font-bold tracking-widest text-foreground">HUSNIYYAH</h3>
              </div>

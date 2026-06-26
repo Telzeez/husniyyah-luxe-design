@@ -41,7 +41,7 @@ export default async function AdminProductsPage() {
                   <tr key={product.id} className="hover:bg-foreground/5 transition-colors">
                     <td className="px-6 py-4">
                       <div className="relative w-12 h-12 rounded-md overflow-hidden bg-foreground/5 border border-foreground/10">
-                        <Image src={product.imageUrl} alt={product.name} fill className="object-cover" />
+                        <Image src={product.imageUrl} alt={product.name} fill sizes="100vw" className="object-cover" />
                       </div>
                     </td>
                     <td className="px-6 py-4 font-medium text-foreground">{product.name}</td>
