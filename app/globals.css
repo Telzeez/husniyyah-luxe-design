@@ -1,26 +1,54 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* Mode Backgrounds */
+  --background: #F4F6F8;
   --foreground: #171717;
+
+  /* Variant Mapping: Light Mode (Darker, richer tones for contrast) */
+  --brand-green: #145032;  /* Deep Emerald */
+  --brand-gold: #C49A2D;   /* Deep Amber Gold (Accessible) */
+}
+
+.dark {
+  /* Mode Backgrounds */
+  --background: #1A1D24;
+  --foreground: #EDEDED;
+
+  /* Variant Mapping: Dark Mode (Brighter, desaturated tones) */
+  --brand-green: #34D399;  /* Luminous Mint/Green */
+  --brand-gold: #D2B43C;   /* Your original vibrant gold */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-green: var(--brand-green);
+  --color-brand-gold: var(--brand-gold);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar dynamically respects both themes */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-gold);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-green);
 }
