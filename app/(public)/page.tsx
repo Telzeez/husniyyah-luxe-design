@@ -114,7 +114,7 @@ export default async function HomePage() {
                     <Image
                       src={product.imageUrl}
                       alt={product.name}
-                      fill sizes="100vw"
+                      fill
                       className="object-contain drop-shadow-xl"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />

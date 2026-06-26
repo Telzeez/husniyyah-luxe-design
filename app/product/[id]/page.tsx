@@ -41,7 +41,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
                 <Image
                   src={product.imageUrl}
                   alt={product.name}
-                  fill sizes="100vw"
+                  fill
                   className="object-contain drop-shadow-2xl"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
