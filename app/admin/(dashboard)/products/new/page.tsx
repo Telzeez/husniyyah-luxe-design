@@ -3,6 +3,8 @@ import { db } from '../../../../../src/db';
 import { products } from '../../../../../src/db/schema';
 import { desc } from 'drizzle-orm';
 
+export const dynamic = 'force-dynamic';
+
 export default async function NewProductPage() {
   const result = await db.selectDistinct({ category: products.category }).from(products);
   const existingCategories = result.map(r => r.category).filter(Boolean) as string[];

@@ -4,6 +4,8 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { ProductForm } from '../../ProductForm';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const productId = parseInt(resolvedParams.id, 10);
