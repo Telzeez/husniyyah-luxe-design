@@ -2,15 +2,35 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { db } from '../../../src/db';
 import { products } from '../../../src/db/schema';
-import { desc } from 'drizzle-orm';
+import { desc, ilike, eq, and } from 'drizzle-orm';
 import AddToCartButton from '../../../components/AddToCartButton';
+import { ProductFilter } from '../../../components/ProductFilter';
 
 export const dynamic = 'force-dynamic';
 
-export default async function ProductsPage() {
+export default async function ProductsPage({ searchParams }: { searchParams: Promise<{ q?: string, category?: string }> }) {
+  const resolvedParams = await searchParams;
+  const search = resolvedParams?.q || '';
+  const categoryFilter = resolvedParams?.category || '';
+
   let allProducts: any[] = [];
+  let allCategories: string[] = [];
+  
   try {
-    allProducts = await db.select().from(products).orderBy(desc(products.id));
+    const conditions = [];
+    if (search) {
+      conditions.push(ilike(products.name, `%${search}%`));
+    }
+    if (categoryFilter && categoryFilter !== 'All') {
+      conditions.push(eq(products.category, categoryFilter));
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+    
+    allProducts = await db.select().from(products).where(whereClause).orderBy(desc(products.id));
+    
+    const catResult = await db.selectDistinct({ category: products.category }).from(products);
+    allCategories = catResult.map(r => r.category).filter(Boolean) as string[];
   } catch (error) {
     console.error('Failed to fetch products:', error);
   }
@@ -24,6 +44,8 @@ export default async function ProductsPage() {
           Browse our complete collection of handcrafted luxury items. Each piece is made with unparalleled attention to detail.
         </p>
       </div>
+
+      <ProductFilter categories={allCategories} />
 
       {allProducts.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
@@ -42,6 +64,11 @@ export default async function ProductsPage() {
                 </div>
               </div>
               <div className="p-6 flex flex-col items-center flex-1 bg-background z-20">
+                {product.category && product.category !== 'Uncategorized' && (
+                  <span className="mb-2 text-[10px] font-bold uppercase tracking-wider text-brand-gold bg-brand-gold/10 px-2 py-1 rounded-full">
+                    {product.category}
+                  </span>
+                )}
                 <h3 className="text-foreground font-bold text-lg mb-2 text-center line-clamp-1 transition-colors">{product.name}</h3>
                 <div className="flex items-center justify-between w-full mt-auto pt-4">
                   <p className="text-brand-gold font-bold text-lg tracking-wider">₦{(product.price / 100).toFixed(2)}</p>

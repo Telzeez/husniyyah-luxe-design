@@ -19,10 +19,13 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     notFound();
   }
 
+  const result = await db.selectDistinct({ category: products.category }).from(products);
+  const existingCategories = result.map(r => r.category).filter(Boolean) as string[];
+
   return (
     <div>
       <h2 className="text-2xl font-bold text-foreground mb-8">Edit Product</h2>
-      <ProductForm initialData={product} />
+      <ProductForm initialData={product} existingCategories={existingCategories} />
     </div>
   );
 }

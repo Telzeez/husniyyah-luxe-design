@@ -5,8 +5,19 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { createProduct, updateProduct } from '../../../../src/actions/product';
 
-export function ProductForm({ initialData }: { initialData?: any }) {
+const PREDEFINED_CATEGORIES = [
+  "Resin Home decor",
+  "Resin Keyholder beauties 😍",
+  "Writing and reading materials",
+  "Resin Jewelry 🩷",
+  "Resin Phone accessories",
+  "Souvenirs 🥰",
+  "Others"
+];
+
+export function ProductForm({ initialData, existingCategories = [] }: { initialData?: any, existingCategories?: string[] }) {
   const router = useRouter();
+  const allCategories = Array.from(new Set([...PREDEFINED_CATEGORIES, ...existingCategories]));
   const [isPending, startTransition] = useTransition();
   const [files, setFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>(
@@ -146,6 +157,24 @@ export function ProductForm({ initialData }: { initialData?: any }) {
                 className="w-full px-4 py-2 bg-background border border-foreground/20 rounded-md focus:outline-none focus:border-brand-gold text-foreground"
                 placeholder="e.g. 15000"
               />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">Category</label>
+              <input 
+                type="text" 
+                name="category" 
+                list="category-options"
+                required 
+                defaultValue={initialData?.category || ''}
+                className="w-full px-4 py-2 bg-background border border-foreground/20 rounded-md focus:outline-none focus:border-brand-gold text-foreground"
+                placeholder="Select or type a new category"
+              />
+              <datalist id="category-options">
+                {allCategories.map((cat, idx) => (
+                  <option key={idx} value={cat} />
+                ))}
+              </datalist>
             </div>
           </div>
 

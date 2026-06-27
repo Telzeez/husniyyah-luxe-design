@@ -11,6 +11,7 @@ export async function createProduct(prevState: any, formData: FormData) {
   const priceString = formData.get('price') as string;
   const imageUrl = formData.get('imageUrl') as string;
   const imagesStr = formData.get('images') as string;
+  const category = (formData.get('category') as string) || 'Uncategorized';
 
   if (!name || !description || !priceString || !imageUrl) {
     return { error: 'Please fill out all fields and upload an image.' };
@@ -30,6 +31,7 @@ export async function createProduct(prevState: any, formData: FormData) {
       price,
       imageUrl,
       images,
+      category,
     });
     
     revalidatePath('/admin/products');
@@ -62,6 +64,7 @@ export async function updateProduct(id: number, prevState: any, formData: FormDa
   const priceString = formData.get('price') as string;
   const imageUrl = formData.get('imageUrl') as string;
   const imagesStr = formData.get('images') as string;
+  const category = (formData.get('category') as string) || 'Uncategorized';
 
   if (!name || !description || !priceString || !imageUrl) {
     return { error: 'Please fill out all fields and ensure image is uploaded.' };
@@ -76,7 +79,7 @@ export async function updateProduct(id: number, prevState: any, formData: FormDa
 
   try {
     await db.update(products)
-      .set({ name, description, price, imageUrl, images })
+      .set({ name, description, price, imageUrl, images, category })
       .where(eq(products.id, id));
       
     revalidatePath('/admin/products');

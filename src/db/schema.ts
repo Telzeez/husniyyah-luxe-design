@@ -20,4 +20,5 @@ export const products = pgTable('products', {
   price: integer('price').notNull(), // stored in cents
   imageUrl: varchar('image_url', { length: 255 }).notNull(),
   images: json('images').$type<string[]>().default([]),
+  category: varchar('category', { length: 255 }).default('Uncategorized'),
 });

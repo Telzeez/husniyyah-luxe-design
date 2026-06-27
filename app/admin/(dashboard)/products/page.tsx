@@ -25,6 +25,7 @@ export default async function AdminProductsPage() {
               <tr>
                 <th className="px-6 py-4">Image</th>
                 <th className="px-6 py-4">Name</th>
+                <th className="px-6 py-4">Category</th>
                 <th className="px-6 py-4">Price</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -45,6 +46,7 @@ export default async function AdminProductsPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4 font-medium text-foreground">{product.name}</td>
+                    <td className="px-6 py-4 text-foreground/70">{product.category}</td>
                     <td className="px-6 py-4">₦{(product.price / 100).toFixed(2)}</td>
                     <td className="px-6 py-4 text-right space-x-3">
                       <Link href={`/admin/products/${product.id}/edit`} className="text-brand-gold hover:text-brand-green transition-colors font-medium">
