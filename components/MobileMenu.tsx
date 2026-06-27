@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import ThemeToggle from './ThemeToggle';
 
 export default function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +30,11 @@ export default function MobileMenu() {
           <Link href="#" onClick={() => setIsOpen(false)} className="hover:text-brand-gold transition-colors uppercase py-2">Blog</Link>
           <Link href="#" onClick={() => setIsOpen(false)} className="hover:text-brand-gold transition-colors uppercase py-2">Pages</Link>
           <Link href="/client" onClick={() => setIsOpen(false)} className="hover:text-brand-gold transition-colors uppercase py-2">Client Portal</Link>
+          
+          <div className="pt-4 mt-2 border-t border-brand-gold/20 flex items-center justify-between">
+            <span className="uppercase text-foreground/70">Theme</span>
+            <ThemeToggle />
+          </div>
         </div>
       )}
     </div>
