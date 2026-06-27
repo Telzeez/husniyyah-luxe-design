@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { logout } from '../../src/actions/auth';
-import ThemeToggle from '../../components/ThemeToggle';
+import { logout } from '../../../src/actions/auth';
+import ThemeToggle from '../../../components/ThemeToggle';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   try {

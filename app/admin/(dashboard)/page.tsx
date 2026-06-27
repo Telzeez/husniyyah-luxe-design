@@ -1,5 +1,5 @@
-import { db } from '../../src/db';
-import { products } from '../../src/db/schema';
+import { db } from '../../../src/db';
+import { products } from '../../../src/db/schema';
 import { sql } from 'drizzle-orm';
 import Link from 'next/link';
 

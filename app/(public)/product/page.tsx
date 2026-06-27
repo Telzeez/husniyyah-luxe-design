@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { db } from '../../../src/db';
 import { products } from '../../../src/db/schema';
 import { desc } from 'drizzle-orm';
+import AddToCartButton from '../../../components/AddToCartButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,7 +43,10 @@ export default async function ProductsPage() {
               </div>
               <div className="p-6 flex flex-col items-center flex-1 bg-background z-20">
                 <h3 className="text-foreground font-bold text-lg mb-2 text-center line-clamp-1 transition-colors">{product.name}</h3>
-                <p className="text-brand-gold font-bold text-lg tracking-wider mt-auto">${product.price}</p>
+                <div className="flex items-center justify-between w-full mt-auto pt-4">
+                  <p className="text-brand-gold font-bold text-lg tracking-wider">₦{(product.price / 100).toFixed(2)}</p>
+                  <AddToCartButton product={product} compact />
+                </div>
               </div>
             </Link>
           ))}

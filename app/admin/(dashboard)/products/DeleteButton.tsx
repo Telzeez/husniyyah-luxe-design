@@ -1,7 +1,7 @@
 'use client';
 
 import { useTransition } from 'react';
-import { deleteProduct } from '../../../src/actions/product';
+import { deleteProduct } from '../../../../src/actions/product';
 
 export function DeleteButton({ id }: { id: number }) {
   const [isPending, startTransition] = useTransition();

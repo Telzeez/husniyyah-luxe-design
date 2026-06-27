@@ -5,6 +5,8 @@ export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
   const filename = searchParams.get('filename');
 
+  const randomSuffix = searchParams.get('randomSuffix') === 'true';
+
   if (!filename) {
     return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
   }
@@ -17,6 +19,7 @@ export async function POST(request: Request) {
   try {
     const blob = await put(filename, request.body, {
       access: 'public',
+      addRandomSuffix: randomSuffix,
     });
 
     return NextResponse.json(blob);

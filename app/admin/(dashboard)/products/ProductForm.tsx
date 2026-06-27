@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { createProduct, updateProduct } from '../../../src/actions/product';
+import { createProduct, updateProduct } from '../../../../src/actions/product';
 
 export function ProductForm({ initialData }: { initialData?: any }) {
   const router = useRouter();
@@ -35,25 +35,42 @@ export function ProductForm({ initialData }: { initialData?: any }) {
 
         // If user selected new files, upload to Vercel Blob
         if (files.length > 0) {
-          const uploadedUrls = await Promise.all(
-            files.map(async (f) => {
-              const response = await fetch(`/api/upload?filename=${f.name}`, {
-                method: 'POST',
-                body: f,
-              });
+          const uploadFiles = async (force: boolean) => {
+            return await Promise.all(
+              files.map(async (f) => {
+                const response = await fetch(`/api/upload?filename=${f.name}${force ? '&randomSuffix=true' : ''}`, {
+                  method: 'POST',
+                  body: f,
+                });
 
-              if (!response.ok) {
-                const errBody = await response.json().catch(() => ({}));
-                throw new Error(`Failed to upload image: ${errBody.error || response.statusText || 'Unknown error'}`);
+                if (!response.ok) {
+                  const errBody = await response.json().catch(() => ({}));
+                  throw new Error(`Failed to upload image: ${errBody.error || response.statusText || 'Unknown error'}`);
+                }
+
+                const blob = await response.json();
+                return blob.url;
+              })
+            );
+          };
+
+          try {
+            const uploadedUrls = await uploadFiles(false);
+            finalImageUrl = uploadedUrls[0];
+            finalImages = uploadedUrls;
+          } catch (err: any) {
+            if (err.message.includes('already exists')) {
+              if (window.confirm("An image with this name already exists. Do you want to continue and upload it as a unique file?")) {
+                const uploadedUrls = await uploadFiles(true);
+                finalImageUrl = uploadedUrls[0];
+                finalImages = uploadedUrls;
+              } else {
+                throw new Error("Upload cancelled by user.");
               }
-
-              const blob = await response.json();
-              return blob.url;
-            })
-          );
-
-          finalImageUrl = uploadedUrls[0];
-          finalImages = uploadedUrls;
+            } else {
+              throw err;
+            }
+          }
         }
 
         // Add the image URLs to our formData for the Server Action

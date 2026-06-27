@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { db } from '../../src/db';
 import { products } from '../../src/db/schema';
 import { desc } from 'drizzle-orm';
+import AddToCartButton from '../../components/AddToCartButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -78,13 +79,16 @@ export default async function HomePage() {
             </Link>
           </div>
           <div className="md:w-1/2 grid grid-cols-2 gap-6">
-            {trendingProducts.slice(0, 2).map((product, idx) => (
-              <div key={idx} className="bg-background rounded-lg p-6 flex flex-col items-center border border-foreground/10 hover:border-brand-gold/30 transition-colors shadow-sm">
+            {trendingProducts.slice(0, 2).map((product) => (
+              <Link href={`/product/${product.id}`} key={product.id} className="bg-background rounded-lg p-6 flex flex-col items-center border border-foreground/10 hover:border-brand-gold/30 transition-colors shadow-sm relative group">
                 <div className="relative w-full aspect-square mb-4">
                   <Image src={product.imageUrl} alt={product.name} fill sizes="100vw" className="object-contain drop-shadow-2xl" />
                 </div>
-                <h3 className="text-foreground font-medium text-center line-clamp-1 transition-colors">{product.name}</h3>
-              </div>
+                <h3 className="text-foreground font-medium text-center line-clamp-1 transition-colors mb-4">{product.name}</h3>
+                <div className="mt-auto">
+                  <AddToCartButton product={product} compact />
+                </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -129,11 +133,7 @@ export default async function HomePage() {
                   <div className="w-10 h-[2px] bg-brand-green mb-4"></div>
                   <div className="flex items-center justify-between mt-auto">
                     <p className="text-xl text-foreground font-light transition-colors">₦{(product.price / 100).toFixed(2)}</p>
-                    <span className="w-10 h-10 rounded-full bg-foreground/5 border border-foreground/10 flex items-center justify-center group-hover:bg-brand-gold transition-colors">
-                      <svg className="w-4 h-4 text-foreground group-hover:text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </span>
+                    <AddToCartButton product={product} compact />
                   </div>
                 </div>
               </Link>
