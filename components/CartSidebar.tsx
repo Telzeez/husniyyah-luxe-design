@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useCart } from './CartProvider';
 
 export default function CartSidebar() {
-  const { items, isCartOpen, toggleCart, removeFromCart, updateQuantity, totalPrice } = useCart();
+  const { items, isCartOpen, toggleCart, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
 
   if (!isCartOpen) return null;
 
@@ -106,13 +106,21 @@ export default function CartSidebar() {
               <span className="text-foreground/70 uppercase tracking-widest text-sm font-bold">Subtotal</span>
               <span className="text-2xl font-bold text-foreground">₦{(totalPrice / 100).toFixed(2)}</span>
             </div>
-            <Link 
-              href="/checkout"
-              onClick={toggleCart}
-              className="block w-full text-center bg-brand-green text-white py-4 font-bold uppercase tracking-widest text-sm hover:bg-brand-gold hover:text-background transition-colors"
-            >
-              Secure Checkout
-            </Link>
+            <div className="flex flex-col space-y-3">
+              <button 
+                onClick={clearCart}
+                className="block w-full text-center border border-foreground/20 text-foreground/70 py-3 font-bold uppercase tracking-widest text-xs hover:border-brand-gold hover:text-brand-gold transition-colors"
+              >
+                Clear Cart
+              </button>
+              <Link 
+                href="/checkout"
+                onClick={toggleCart}
+                className="block w-full text-center bg-brand-green text-white py-4 font-bold uppercase tracking-widest text-sm hover:bg-brand-gold hover:text-background transition-colors"
+              >
+                Secure Checkout
+              </Link>
+            </div>
           </div>
         )}
 

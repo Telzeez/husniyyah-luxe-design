@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import AddToCartButton from '../../../../components/AddToCartButton';
 import ProductGallery from '../../../../components/ProductGallery';
+import FavoriteButton from '../../../../components/FavoriteButton';
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -64,11 +65,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
             <div className="flex items-center space-x-6 mt-auto">
               <AddToCartButton product={product} />
-              <button aria-label="Add to Wishlist" className="w-14 h-14 border border-gray-300 dark:border-white/20 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-400 hover:text-[#D2B43C] hover:border-[#D2B43C] transition-colors">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </button>
+              <FavoriteButton productId={product.id} />
             </div>
           </div>
         </div>
