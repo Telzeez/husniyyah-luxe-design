@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, varchar, integer, json } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -19,4 +19,5 @@ export const products = pgTable('products', {
   description: text('description').notNull(),
   price: integer('price').notNull(), // stored in cents
   imageUrl: varchar('image_url', { length: 255 }).notNull(),
+  images: json('images').$type<string[]>().default([]),
 });

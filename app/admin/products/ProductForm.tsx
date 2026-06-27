@@ -8,8 +8,10 @@ import { createProduct, updateProduct } from '../../../src/actions/product';
 export function ProductForm({ initialData }: { initialData?: any }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(initialData?.imageUrl || null);
+  const [files, setFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>(
+    initialData?.images?.length > 0 ? initialData.images : (initialData?.imageUrl ? [initialData.imageUrl] : [])
+  );
   const [error, setError] = useState('');
 
   const isEdit = !!initialData;
@@ -21,33 +23,42 @@ export function ProductForm({ initialData }: { initialData?: any }) {
     const formData = new FormData(e.currentTarget);
     
     // Validate image presence
-    if (!isEdit && !file) {
-      setError('Please select an image to upload.');
+    if (!isEdit && files.length === 0) {
+      setError('Please select at least one image to upload.');
       return;
     }
 
     startTransition(async () => {
       try {
         let finalImageUrl = initialData?.imageUrl;
+        let finalImages = initialData?.images || [];
 
-        // If user selected a new file, upload to Vercel Blob first
-        if (file) {
-          const response = await fetch(`/api/upload?filename=${file.name}`, {
-            method: 'POST',
-            body: file,
-          });
+        // If user selected new files, upload to Vercel Blob
+        if (files.length > 0) {
+          const uploadedUrls = await Promise.all(
+            files.map(async (f) => {
+              const response = await fetch(`/api/upload?filename=${f.name}`, {
+                method: 'POST',
+                body: f,
+              });
 
-          if (!response.ok) {
-            const errBody = await response.json().catch(() => ({}));
-            throw new Error(`Failed to upload image to Vercel Blob: ${errBody.error || response.statusText || 'Unknown error'}`);
-          }
+              if (!response.ok) {
+                const errBody = await response.json().catch(() => ({}));
+                throw new Error(`Failed to upload image: ${errBody.error || response.statusText || 'Unknown error'}`);
+              }
 
-          const blob = await response.json();
-          finalImageUrl = blob.url;
+              const blob = await response.json();
+              return blob.url;
+            })
+          );
+
+          finalImageUrl = uploadedUrls[0];
+          finalImages = uploadedUrls;
         }
 
-        // Add the image URL to our formData for the Server Action
-        formData.append('imageUrl', finalImageUrl);
+        // Add the image URLs to our formData for the Server Action
+        formData.append('imageUrl', finalImageUrl || '');
+        formData.append('images', JSON.stringify(finalImages));
 
         let result;
         if (isEdit) {
@@ -116,15 +127,19 @@ export function ProductForm({ initialData }: { initialData?: any }) {
 
           {/* Image Upload */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-foreground mb-1">Product Image</label>
+            <label className="block text-sm font-medium text-foreground mb-1">Product Images</label>
             <div className="border-2 border-dashed border-foreground/20 rounded-lg p-4 flex flex-col items-center justify-center bg-foreground/5 relative min-h-[160px] group">
-              {preview ? (
-                <div className="absolute inset-0 w-full h-full p-2">
-                  <div className="relative w-full h-full rounded-md overflow-hidden bg-background">
-                    <Image src={preview} alt="Preview" fill sizes="100vw" className="object-contain" />
+              {previews.length > 0 ? (
+                <div className="absolute inset-0 w-full h-full p-2 overflow-y-auto">
+                  <div className="grid grid-cols-3 gap-2">
+                    {previews.map((src, idx) => (
+                      <div key={idx} className="relative aspect-square rounded-md overflow-hidden bg-background border border-foreground/10">
+                        <Image src={src} alt={`Preview ${idx + 1}`} fill sizes="33vw" className="object-contain" />
+                      </div>
+                    ))}
                   </div>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-background/50 transition-opacity">
-                     <span className="text-sm font-bold text-foreground">Click to change</span>
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-background/80 transition-opacity">
+                     <span className="text-sm font-bold text-foreground">Click to change all images</span>
                   </div>
                 </div>
               ) : (
@@ -132,19 +147,20 @@ export function ProductForm({ initialData }: { initialData?: any }) {
                   <svg className="mx-auto h-12 w-12 text-foreground/40" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <p className="mt-1 text-sm text-foreground/60">Select an image file</p>
+                  <p className="mt-1 text-sm text-foreground/60">Select image files (multiple allowed)</p>
                 </div>
               )}
               
               <input 
                 type="file" 
                 accept="image/*"
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                multiple
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 onChange={(e) => {
-                  const f = e.target.files?.[0];
-                  if (f) {
-                    setFile(f);
-                    setPreview(URL.createObjectURL(f));
+                  const selectedFiles = Array.from(e.target.files || []);
+                  if (selectedFiles.length > 0) {
+                    setFiles(selectedFiles);
+                    setPreviews(selectedFiles.map(f => URL.createObjectURL(f)));
                   }
                 }}
               />

@@ -5,6 +5,7 @@ import { products } from '../../../../src/db/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import AddToCartButton from '../../../../components/AddToCartButton';
+import ProductGallery from '../../../../components/ProductGallery';
 
 export default async function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -35,21 +36,11 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
 
         <div className="flex flex-col md:flex-row gap-16">
           {/* Product Image */}
-          <div className="md:w-1/2">
-            <div className="relative aspect-square w-full bg-gray-50 dark:bg-[#121419] rounded-2xl flex items-center justify-center p-8 border border-gray-200 dark:border-white/5 transition-colors">
-              <div className="absolute inset-0 bg-gradient-to-t from-gray-200/50 dark:from-[#121419] via-transparent to-transparent z-10 opacity-60 transition-colors"></div>
-              <div className="relative w-full h-full z-0">
-                <Image
-                  src={product.imageUrl}
-                  alt={product.name}
-                  fill
-                  className="object-contain drop-shadow-2xl"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
-                />
-              </div>
-            </div>
-          </div>
+          <ProductGallery 
+            productName={product.name} 
+            initialImageUrl={product.imageUrl} 
+            images={product.images || []} 
+          />
 
           {/* Product Info */}
           <div className="md:w-1/2 flex flex-col justify-center">

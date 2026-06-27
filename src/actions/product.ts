@@ -10,10 +10,16 @@ export async function createProduct(prevState: any, formData: FormData) {
   const description = formData.get('description') as string;
   const priceString = formData.get('price') as string;
   const imageUrl = formData.get('imageUrl') as string;
+  const imagesStr = formData.get('images') as string;
 
   if (!name || !description || !priceString || !imageUrl) {
     return { error: 'Please fill out all fields and upload an image.' };
   }
+
+  let images = [];
+  try {
+    if (imagesStr) images = JSON.parse(imagesStr);
+  } catch(e) {}
 
   const price = Math.round(parseFloat(priceString) * 100); // convert to cents
 
@@ -23,6 +29,7 @@ export async function createProduct(prevState: any, formData: FormData) {
       description,
       price,
       imageUrl,
+      images,
     });
     
     revalidatePath('/admin/products');
@@ -54,16 +61,22 @@ export async function updateProduct(id: number, prevState: any, formData: FormDa
   const description = formData.get('description') as string;
   const priceString = formData.get('price') as string;
   const imageUrl = formData.get('imageUrl') as string;
+  const imagesStr = formData.get('images') as string;
 
   if (!name || !description || !priceString || !imageUrl) {
     return { error: 'Please fill out all fields and ensure image is uploaded.' };
   }
 
+  let images = [];
+  try {
+    if (imagesStr) images = JSON.parse(imagesStr);
+  } catch(e) {}
+
   const price = Math.round(parseFloat(priceString) * 100);
 
   try {
     await db.update(products)
-      .set({ name, description, price, imageUrl })
+      .set({ name, description, price, imageUrl, images })
       .where(eq(products.id, id));
       
     revalidatePath('/admin/products');
