@@ -23,9 +23,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/admin/login', req.nextUrl));
   }
 
-  if (isPublicRoute && payload) {
-    return NextResponse.redirect(new URL('/admin', req.nextUrl));
-  }
+  // Allow logged-in users to see the login page (it will display a dashboard/logout link)
 
   return NextResponse.next();
 }
